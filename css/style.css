@@ -1,0 +1,721 @@
+/* ==========================================================================
+   1. GENEL AYARLAR & DEĞİŞKENLER
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Logo Renkleri */
+    --accent-teal: #1fced2;      /* Logo'daki canlı turkuaz - Kelebek rengi */
+    --accent-magenta: #b13b8d;   /* Logo'daki fuşya/pembe - Metin rengi */
+    
+    /* Site Temel Renkleri */
+    --primary-text: #222;       /* Başlıklar için koyu metin */
+    --bg-light: #fafafa;         /* Çok açık gri arka plan - Göz yormaması için */
+    --text-main: #555;          /* Genel metin rengi */
+    --white: #ffffff;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background-color: var(--white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3, h4, .logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-text);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   2. HEADER & NAVBAR
+   ========================================================================== */
+header {
+    background-color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* Logonun dikeyde rahat nefes alması için */
+    position: relative; /* Mobil menünün konumlanması için eklendi */
+}
+
+/* Doğrudan navbar içindeki logoyu hedefliyoruz */
+.navbar img {
+    height: 70px;       /* Logonun ideal yüksekliği, duruma göre 60px-80px arası değiştirebilirsin */
+    width: auto;        /* Logonun en-boy oranının bozulmasını engeller */
+    display: block;
+    object-fit: contain;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    align-items: center; /* Menü yazılarını logoya göre dikeyde ortalar */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+    padding-bottom: 5px;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+    color: var(--accent-teal); /* Üzerine gelince logodaki turkuaz rengi alır */
+}
+
+/* Linklerin altına şık çizgi efekti */
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background-color: var(--accent-teal);
+    transition: var(--transition);
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+/* ==========================================================================
+   2.1 JS'SİZ MOBİL MENÜ AYARLARI (YENİ EKLENENLER)
+   ========================================================================== */
+
+/* Hileyi yapacak olan HTML checkbox kutusunu gizliyoruz */
+.menu-checkbox {
+    display: none;
+}
+
+/* Üç çizgi tasarımı (Masaüstünde tamamen gizli) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-main); /* Senin ana yazı rengini alır */
+    margin: 4px 0;
+    transition: var(--transition);
+}
+
+/* --- TELEFON VE MOBİL GÖRÜNÜM (Ekran 768px ve altına düştüğünde) --- */
+@media screen and (max-width:768px){
+
+    .menu-toggle{
+        display:flex;
+    }
+
+    .nav-menu{
+        display:none;
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        background:#fff;
+        box-shadow:0 5px 15px rgba(0,0,0,.1);
+    }
+
+    .nav-menu ul{
+        flex-direction:column;
+        padding:20px 0;
+        gap:15px;
+    }
+
+    .menu-checkbox:checked ~ .nav-menu{
+        display:block;
+    }
+
+    nav ul li {
+        width: 100%;
+        text-align: center;
+    }
+
+    nav ul li a {
+        display: block;
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    /* Alt çizgi animasyonunu mobilde devre dışı bırakıp yerine basit renk değişimi bırakıyoruz */
+    nav ul li a::after {
+        display: none;
+    }
+
+    /* --- SİHİRLİ DOKUNUŞ: Checkbox seçildiğinde menüyü göster --- */
+    .menu-checkbox:checked ~ nav {
+        display: block;
+    }
+    
+    /* Üç çizgiye basılınca çizgilerin çarpı (X) işaretine dönüşmesi */
+    .menu-checkbox:checked ~ .menu-toggle .bar:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    .menu-checkbox:checked ~ .menu-toggle .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-checkbox:checked ~ .menu-toggle .bar:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+}
+/* ==========================================================================
+   3. HERO SECTION (ARKA PLAN)
+   ========================================================================== */
+.hero {
+    height: 80vh;
+    min-height: 450px; 
+    /* NOT: images klasöründeki doğru salon resminin adını buraya yazmalısın. 
+       Şu an tabela resmi çıkıyorsa, klasördeki havuzlu salon resminin adını öğrenip (örn: salon.jpg) buraya yaz. */
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), 
+                url('../images/arka_plan.png') no-repeat center center/cover; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    padding: 0 20px;
+    transition: background 0.3s ease; /* Yumuşak geçiş için */
+}
+
+.hero-content h1 {
+    color: var(--white);
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 35px;
+    font-weight: 300;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Buton Tasarımı - Ana Renk Fuşya, Hover Turkuaz */
+.btn {
+    display: inline-block;
+    background-color: var(--accent-magenta);
+    color: var(--white);
+    padding: 14px 35px;
+    text-decoration: none;
+    border-radius: 5px; /* Daha kurumsal bir görünüm için köşeler hafif kıvrık */
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(177, 59, 141, 0.3);
+}
+
+.btn:hover {
+    background-color: var(--accent-teal);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(31, 206, 210, 0.4);
+}
+
+/* ==========================================================================
+   4. HAKKIMIZDA BÖLÜMÜ (MASAÜSTÜ AYARLARI - RESİMSİZ)
+   ========================================================================== */
+.about {
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-text {
+    max-width: 800px; /* Yazının ekrana çok geniş yayılarak okunmasının zorlaşmasını engeller */
+    text-align: center; /* Başlığı ve metni ortalar */
+}
+
+.about-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 15px;
+    display: inline-block; /* Çizginin başlığın genişliği kadar olması için */
+}
+
+/* Başlık altındaki çizgi - Turkuaz (Tam Ortalanmış) */
+.about-text h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background-color: var(--accent-teal);
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    line-height: 1.8;
+}
+
+/* ==========================================================================
+   HAKKIMIZDA BÖLÜMÜ MOBİL DÜZELTMESİ (768px ve altı telefonlar için)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .about {
+        padding: 50px 20px !important;
+    }
+
+    .about-text h2 {
+        font-size: 2rem !important;
+    }
+
+    .about-text p {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        text-align: justify !important; /* Telefon ekranında sağ ve sol kenarlar düzgün bitsin diye */
+    }
+}
+
+/* ==========================================================================
+   5. HİZMETLERİMİZ BÖLÜMÜ
+   ========================================================================== */
+:root {
+    --brand-blue: #00a7b4;       /* Logodaki kelebeğin canlı mavi/turkuaz rengi */
+    --brand-purple: #9a1b64;     /* Esbalife yazısının mor/magenta rengi (Gerekirse başlıklarda kullanabilirsiniz) */
+    --text-dark: #333333;
+    --text-muted: #777777;
+    --bg-light: #fbfbfb;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Genel Alan Ayarları */
+.services {
+    padding: 80px 0;
+    background-color: var(--bg-light);
+    font-family: 'Poppins', sans-serif;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 50px;
+}
+
+/* Izgara (Grid) Yapısı: Yan yana 3'lü dizilim */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Kart Tasarımı */
+.service-card {
+    background: #ffffff;
+    border-radius: 20px; /* Görseldeki gibi oval köşeler */
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Kartın Resim Alanı */
+.card-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Resmin kutuya tam oturmasını sağlar */
+}
+
+/* Kartın Yazı Alanı */
+.card-content {
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    color: #222;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 25px;
+    flex-grow: 1; /* Açıklamalar farklı uzunlukta olsa da butonları eşitler */
+}
+
+/* Randevu Al Butonu (Logonuzun Mavi Renginde) */
+.appointment-btn {
+    font-size: 0.9rem;
+    color: var(--brand-blue);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    margin-top: auto;
+}
+
+.appointment-btn i {
+    font-size: 0.95rem;
+}
+
+/* Butona hovering (üzerine gelince) efekti */
+.appointment-btn:hover {
+    color: #008691; /* Mavinin hafif koyusu */
+    transform: translateX(3px); /* Sağa doğru hafif tatlı bir hareket */
+}
+
+/* Mobil Cihazlar İçin Uyum */
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+    }
+}
+
+/* ==========================================================================
+   6. NEDEN BİZ? BÖLÜMÜ
+   ========================================================================== */
+.why-us {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.why-us h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+/* İkon Rengi - Logodaki Esbalife Moru */
+.why-item i {
+    font-size: 3rem;
+    color: #9a1b64; /* Turkuaz yerine logodaki mor rengi ekledik */
+    margin-bottom: 20px;
+}
+
+.why-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.why-item p {
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   7. SALONUMUZ (GALERİ) BÖLÜMÜ
+   ========================================================================== */
+.gallery {
+    background-color: var(--bg-light);
+    padding: 80px 0;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* ==========================================================================
+   8. İLETİŞİM & HARİTA ALANI (MASAÜSTÜ AYARLARI - TÜM RENKLERİYLE)
+   ========================================================================== */
+.appointment-contact {
+    padding: 80px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+.contact-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.contact-info p {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* 🎨 İkon Renkleri - Pembe/Magentalar Tamamen Geri Geldi */
+.contact-info p i,
+.contact-info p a i {
+    color: var(--accent-magenta) !important;
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+/* Instagram ikonunun kendi orijinal rengini koruyoruz */
+.contact-info p i.fa-brands.fa-instagram {
+    color: #B13B8D !important;
+}
+
+/* Çalışma Saatleri Alanı */
+.contact-info div {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.contact-info div p i {
+    color: var(--accent-magenta) !important;
+}
+
+/* Harita Dış Kutusu */
+.map-container {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    display: block;
+}
+
+/* ==========================================================================
+   İLETİŞİM & HARİTA ALANI MOBİL DÜZELTMESİ (RENKLER + KUTUCUK KORUMALI)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .appointment-contact {
+        grid-template-columns: 1fr !important;
+        gap: 40px !important;
+        padding: 40px 20px !important;
+    }
+
+    .contact-info {
+        width: 100% !important;
+    }
+
+    .contact-info h2 {
+        font-size: 2rem !important;
+        margin-bottom: 20px !important;
+        text-align: center !important;
+    }
+
+    /* Mobilde Harita Alanının Boyutu */
+    .map-container {
+        width: 100% !important; 
+        height: 380px !important; 
+        position: relative !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Google Harita Kodunu Küçülterek Beyaz Kutuyu Getirten Sihirli Ayar */
+    .map-container iframe {
+        width: 600px !important; 
+        height: 380px !important; 
+        border: 0 !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: scale(0.65) !important;
+        transform-origin: top left !important;
+        pointer-events: auto !important; 
+    }
+}
+/* ==========================================================================
+   9. FOOTER
+   ========================================================================== */
+footer {
+    background-color: #222;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   10. WHATSAPP FLOATING BUTTON
+   ========================================================================== */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.05);
+}
+/* ==========================================================================
+   MOBİLDE ARKA PLANIN TAM SIĞMASI VE YAZILARIN RESİM ÜSTÜNDE KALMASI (KESİN ÇÖZÜM)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .hero {
+        position: relative !important;
+        width: 100% !important;
+        
+        /* 🎯 KESİN ÇÖZÜM: Yüksekliği telefon ekranının genişliğine göre (16:9 oranında) 
+           kilitleyen tek kod budur. Altında veya yanında gri alan kalmasını imkansız kılar. */
+        height: 56.25vw !important; 
+        min-height: unset !important;
+        
+        /* Eski arka plan resmini ve tüm gri renkleri tamamen öldürüyoruz */
+        background: url('../images/arka_plan.png') no-repeat center top/100% 100% !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Resmin üzerindeki karartma katmanını tüm alana eşitliyoruz */
+    .hero-overlay {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px !important;
+        background: rgba(0, 0, 0, 0.4) !important; /* Resim üzerindeki hafif karartma */
+    }
+
+    .hero-content {
+        width: 100% !important;
+        text-align: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Başlığın dairesel tabelanın içine kibarca sığması için */
+    .hero-content h1 {
+        font-size: 1.1rem !important; 
+        line-height: 1.2 !important;
+        margin-bottom: 6px !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.95) !important; 
+    }
+
+    /* Açıklama metni */
+    .hero-content p {
+        font-size: 0.75rem !important;
+        margin-bottom: 10px !important;
+        line-height: 1.3 !important;
+        color: #ffffff !important;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.95) !important;
+        max-width: 85% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Buton */
+    .hero .btn, 
+    .hero button,
+    .hero-content a { 
+        padding: 6px 14px !important; 
+        font-size: 0.7rem !important;
+        display: inline-block !important;
+        text-decoration: none !important;
+    }
+}
